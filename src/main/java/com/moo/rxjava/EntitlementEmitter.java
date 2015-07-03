@@ -29,7 +29,12 @@ public class EntitlementEmitter implements Observable.OnSubscribe<String> {
         worker.schedulePeriodically(() -> {
             int j = count.getAndIncrement();
             if(j < responses.length) {
-                subscriber.onNext(responses[j]);
+                String response = responses[j];
+                if(response.equals("ERROR")) {
+                    subscriber.onError(new Exception("Blah"));
+                } else {
+                    subscriber.onNext(response);
+                }
             } else {
                 subscriber.onCompleted();
             }
